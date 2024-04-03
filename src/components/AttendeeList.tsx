@@ -11,6 +11,7 @@ import { IconButton } from "./IconButton";
 import { Table } from "./table/Table";
 import { TableHeader } from "./table/TableHeader";
 import { TableCell } from "./table/TableCell";
+import { TableRow } from "./table/TableRow";
 
 export function AttendeeList() {
   return (
@@ -48,9 +49,9 @@ export function AttendeeList() {
         <tbody>
           {Array.from({ length: 6 }).map((_, i) => {
             return (
-              <tr
+              <TableRow
                 key={i}
-                className="border-b  border-white/10 hover:bg-white/5"
+                className="border-b border-white/10 hover:bg-white/5"
               >
                 <td className="px-3 py-4 text-sm font-semibold text-left">
                   <input
@@ -76,7 +77,7 @@ export function AttendeeList() {
                     <MoreHorizontal className="size-4" />
                   </IconButton>
                 </TableCell>
-              </tr>
+              </TableRow>
             );
           })}
         </tbody>
@@ -85,10 +86,7 @@ export function AttendeeList() {
             <TableCell className="px-3 py-4 text-sm text-zinc-300" colSpan={3}>
               Mostrando 10 de 228 itens
             </TableCell>
-            <td
-              className="px-3 py-4 text-sm text-zinc-300 text-right"
-              colSpan={3}
-            >
+            <TableCell className=" text-right" colSpan={3}>
               <div className="inline-flex gap-8 items-center">
                 <span>Página 1 de 23</span>
                 <div className="flex gap-1.5">
@@ -106,7 +104,7 @@ export function AttendeeList() {
                   </IconButton>
                 </div>
               </div>
-            </td>
+            </TableCell>
           </tr>
         </tfoot>
       </Table>
