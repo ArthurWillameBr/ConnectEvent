@@ -8,6 +8,10 @@ import {
 } from "lucide-react";
 import { IconButton } from "./IconButton";
 
+import { Table } from "./table/Table";
+import { TableHeader } from "./table/TableHeader";
+import { TableCell } from "./table/TableCell";
+
 export function AttendeeList() {
   return (
     <div className="flex flex-col gap-4">
@@ -22,107 +26,90 @@ export function AttendeeList() {
           />
         </div>
       </div>
-      <div className="border border-white/10 rounded-lg">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-white/10 ">
-              <th
-                style={{ width: 48 }}
-                className="px-3 py-4 text-sm font-semibold text-left"
+      <Table>
+        <thead>
+          <tr className="border-b border-white/10 ">
+            <TableHeader style={{ width: 48 }}>
+              <input
+                type="checkbox"
+                className="size-4 bg-black/20 rounded border  border-white/10"
+              />
+            </TableHeader>
+            <TableHeader>Código</TableHeader>
+            <TableHeader>Participantes</TableHeader>
+            <TableHeader>Data de inscrição</TableHeader>
+            <TableHeader>Data do check-in</TableHeader>
+            <th
+              style={{ width: 64 }}
+              className="px-3 py-4 text-sm font-semibold text-left"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: 6 }).map((_, i) => {
+            return (
+              <tr
+                key={i}
+                className="border-b  border-white/10 hover:bg-white/5"
               >
-                <input
-                  type="checkbox"
-                  className="size-4 bg-black/20 rounded border  border-white/10 accent-orange-400"
-                />
-              </th>
-              <th className="px-3 py-4 text-sm font-semibold text-left">
-                Código
-              </th>
-              <th className="px-3 py-4 text-sm font-semibold text-left">
-                Participantes
-              </th>
-              <th className="px-3 py-4 text-sm font-semibold text-left">
-                Data de inscrição
-              </th>
-              <th className="px-3 py-4 text-sm font-semibold text-left">
-                Data do check-in
-              </th>
-              <th
-                style={{ width: 64 }}
-                className="px-3 py-4 text-sm font-semibold text-left"
-              ></th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: 6 }).map((_, i) => {
-              return (
-                <tr
-                  key={i}
-                  className="border-b  border-white/10 hover:bg-white/5"
-                >
-                  <td className="px-3 py-4 text-sm font-semibold text-left">
-                    <input
-                      type="checkbox"
-                      className="size-4 bg-black/20 rounded border border-white/10 "
-                    />
-                  </td>
-                  <td className="px-3 py-4 text-sm text-zinc-300">12334</td>
-                  <td>
-                    <div className="flex flex-col gap-1">
-                      <span className="font-semibold text-white">
-                        Arthur Willame
-                      </span>
-                      <span className="text-sm text-zinc-400">
-                        arthurwillame@gmail.com
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-3 py-4 text-sm text-zinc-300 ">
-                    7 dias atrás
-                  </td>
-                  <td className="px-3 py-4 text-sm text-zinc-300 ">
-                    3 dias atrás
-                  </td>
-                  <td className="px-3 py-4 text-sm text-zinc-300 ">
-                    <IconButton transparent>
-                      <MoreHorizontal className="size-4" />
-                    </IconButton>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td className="px-3 py-4 text-sm text-zinc-300" colSpan={3}>
-                Mostrando 10 de 228 itens
-              </td>
-              <td
-                className="px-3 py-4 text-sm text-zinc-300 text-right"
-                colSpan={3}
-              >
-                <div className="inline-flex gap-8 items-center">
-                  <span>Página 1 de 23</span>
-                  <div className="flex gap-1.5">
-                    <IconButton>
-                      <ChevronsLeft className="size-4" />
-                    </IconButton>
-                    <IconButton>
-                      <ChevronLeft className="size-4" />
-                    </IconButton>
-                    <IconButton>
-                      <ChevronRight className="size-4" />
-                    </IconButton>
-                    <IconButton>
-                      <ChevronsRight className="size-4" />
-                    </IconButton>
+                <td className="px-3 py-4 text-sm font-semibold text-left">
+                  <input
+                    type="checkbox"
+                    className="size-4 bg-black/20 rounded border border-white/10 "
+                  />
+                </td>
+                <TableCell>12334</TableCell>
+                <TableCell>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold text-white">
+                      Arthur Willame
+                    </span>
+                    <span className="text-sm text-zinc-400">
+                      arthurwillame@gmail.com
+                    </span>
                   </div>
+                </TableCell>
+                <TableCell>7 dias atrás</TableCell>
+                <TableCell>3 dias atrás</TableCell>
+                <TableCell>
+                  <IconButton transparent>
+                    <MoreHorizontal className="size-4" />
+                  </IconButton>
+                </TableCell>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          <tr>
+            <TableCell className="px-3 py-4 text-sm text-zinc-300" colSpan={3}>
+              Mostrando 10 de 228 itens
+            </TableCell>
+            <td
+              className="px-3 py-4 text-sm text-zinc-300 text-right"
+              colSpan={3}
+            >
+              <div className="inline-flex gap-8 items-center">
+                <span>Página 1 de 23</span>
+                <div className="flex gap-1.5">
+                  <IconButton>
+                    <ChevronsLeft className="size-4" />
+                  </IconButton>
+                  <IconButton>
+                    <ChevronLeft className="size-4" />
+                  </IconButton>
+                  <IconButton>
+                    <ChevronRight className="size-4" />
+                  </IconButton>
+                  <IconButton>
+                    <ChevronsRight className="size-4" />
+                  </IconButton>
                 </div>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </Table>
     </div>
   );
 }
