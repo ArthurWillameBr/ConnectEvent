@@ -7,26 +7,56 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import { IconButton } from "./IconButton";
-
 import { Table } from "./table/Table";
 import { TableHeader } from "./table/TableHeader";
 import { TableCell } from "./table/TableCell";
 import { TableRow } from "./table/TableRow";
-import { ChangeEvent, useState } from "react";
-import { Attendees } from "./data/Attendees";
+import { ChangeEvent, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 dayjs.locale("pt-br");
+
+interface Attendee {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+  checkedInAt: string | null;
+}
+
 export function AttendeeList() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const TotalPages = Math.ceil(Attendees.length / 10);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
+  const [total, setTotal] = useState(0);
+
+  const TotalPages = Math.ceil(total / 10);
+
+  useEffect(() => {
+    const url = new URL(
+      "http://localhost:3333/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees"
+    );
+
+    url.searchParams.set("pageIndex", String(page - 1));
+
+    //para filtrar pelo nome do participante
+    if (search.length > 0) {
+      url.searchParams.set("query", search);
+    }
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setAttendees(data.attendees);
+        setTotal(data.total);
+      });
+  }, [page, search]);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
+    setPage(1);
   }
 
   function goToNextPage() {
@@ -49,12 +79,11 @@ export function AttendeeList() {
           <Search className="h-4 text-emerald-300" />
           <input
             onChange={handleInputChange}
-            className="bg-transparent flex-1 outline-none p-0 text-sm border-none"
+            className="bg-transparent flex-1 outline-none p-0 text-sm border-none focus:ring-0"
             type="text"
             placeholder="Buscar participantes..."
           />
         </div>
-        {search}
       </div>
       <Table>
         <thead>
@@ -76,7 +105,7 @@ export function AttendeeList() {
           </tr>
         </thead>
         <tbody>
-          {Attendees.slice((page - 1) * 10, page * 10).map((attendee) => {
+          {attendees.map((attendee) => {
             return (
               <TableRow
                 key={attendee.id}
@@ -100,7 +129,13 @@ export function AttendeeList() {
                   </div>
                 </TableCell>
                 <TableCell>{dayjs().to(attendee.createdAt)}</TableCell>
-                <TableCell>{dayjs().to(attendee.checkedInAt)}</TableCell>
+                <TableCell>
+                  {attendee.checkedInAt === null ? (
+                    <span className="text-zinc-400">Não fez check-in</span>
+                  ) : (
+                    dayjs().to(attendee.checkedInAt)
+                  )}
+                </TableCell>
                 <TableCell>
                   <IconButton transparent>
                     <MoreHorizontal className="size-4" />
@@ -113,7 +148,7 @@ export function AttendeeList() {
         <tfoot>
           <tr>
             <TableCell className="px-3 py-4 text-sm text-zinc-300" colSpan={3}>
-              Mostrando 10 de {Attendees.length} itens
+              Mostrando {attendees.length} de {total} itens
             </TableCell>
             <TableCell className=" text-right" colSpan={3}>
               <div className="inline-flex gap-8 items-center">
